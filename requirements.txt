@@ -1,7 +1,7 @@
 astroid==2.3.3
 Click==7.0
 colorama==0.4.3
-fastapi>=0.65.2
+fastapi==0.103.1  # Updated to a specific version to match starlette
 gunicorn==20.0.4
 h11==0.9.0
 isort==4.3.21
@@ -10,8 +10,8 @@ mccabe==0.6.1
 pydantic==1.6.2
 pylint==2.4.4
 six==1.14.0
-starlette>=0.13.2
+starlette==0.31.1  # Updated to a specific version to match fastapi
 uvicorn==0.11.7
-websockets==9.1
+websockets==8.*  # Updated to match the dependency of uvicorn
 wrapt==1.11.2
 uvloop==0.14.0
