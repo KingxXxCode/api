@@ -7,12 +7,12 @@ h11==0.9.0
 isort==4.3.21
 lazy-object-proxy==1.4.3
 mccabe==0.6.1
-pydantic>=1.7.4,<3.0.0  # Loosened constraint to allow compatibility with fastapi
+pydantic<3.0.0,>=1.7.4
 pylint==2.4.4
 six==1.14.0
-starlette==0.31.1
+starlette>=0.27.0,<0.28.0  # Loosened constraint to allow compatibility with fastapi
 uvicorn==0.11.7
 websockets==8.*
 wrapt==1.11.2
 uvloop==0.14.0
-anyio<4.0.0,>=3.7.1  # Added anyio as a dependency for fastapi
+anyio<4.0.0,>=3.7.1
