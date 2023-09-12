@@ -2,9 +2,6 @@ absl-py==1.0.0
 aiohttp==3.8.1
 aiosignal==1.2.0
 alabaster @ file:///home/ktietz/src/ci/alabaster_1611921544520/work
-anaconda-client @ file:///opt/concourse/worker/volumes/live/866d4dd0-ff5b-4d0b-718d-0267a3b10e06/volume/anaconda-client_1635342573767/work
-anaconda-navigator==2.1.1
-anaconda-project @ file:///tmp/build/80754af9/anaconda-project_1626085644852/work
 annotated-types==0.5.0
 anyio==3.7.1
 appdirs==1.4.4
@@ -314,19 +311,12 @@ sphinxcontrib-serializinghtml @ file:///tmp/build/80754af9/sphinxcontrib-seriali
 sphinxcontrib-websupport @ file:///tmp/build/80754af9/sphinxcontrib-websupport_1597081412696/work
 spyder @ file:///opt/concourse/worker/volumes/live/5ce630f9-babe-4f53-755a-cd7324c300d9/volume/spyder_1636480249527/work
 spyder-kernels @ file:///opt/concourse/worker/volumes/live/72f0c5be-8b9e-43d2-67e5-f038915937d7/volume/spyder-kernels_1634236950410/work
-SQLAlchemy @ file:///opt/concourse/worker/volumes/live/454d700c-0b8b-469e-7add-023d0df6ee3d/volume/sqlalchemy_1626948440911/work
 starlette==0.27.0
 statsmodels @ file:///opt/concourse/worker/volumes/live/237cf070-cf87-4ff8-6149-8213b5eb40a5/volume/statsmodels_1614023802257/work
 sympy @ file:///opt/concourse/worker/volumes/live/5ed26665-a223-4942-7dc1-66b2b3830ab1/volume/sympy_1635237064989/work
 tables @ file:///opt/concourse/worker/volumes/live/daa73f70-754b-4f28-73ce-6f96c40f4b9d/volume/pytables_1607975400838/work
-tabulate==0.8.10
 TBB==0.2
 tblib @ file:///Users/ktietz/demo/mc3/conda-bld/tblib_1629402031467/work
-tensorboard==2.7.0
-tensorboard-data-server==0.6.1
-tensorboard-plugin-wit==1.8.0
-tensorflow-estimator==2.7.0
-tensorflow-io-gcs-filesystem==0.22.0
 termcolor==1.1.0
 terminado==0.9.4
 testpath @ file:///tmp/build/80754af9/testpath_1624638946665/work
