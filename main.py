@@ -1,4 +1,5 @@
 from typing import Annotated, Union
+import datetime
     # @title Default title text
 #import matplotlib.pyplot as plt
 
@@ -6,6 +7,24 @@ import pandas as pd
 from io import StringIO
 from fastapi import FastAPI, Query
 import json
+
+from enum import Enum, auto
+
+class CertificateOptions(Enum):
+    دكتوراة = 0
+    ماجستير = 1
+    بكالوريوس = 2
+    دبلوم = 3
+    ثانوية_صناعية_تجارية = 4
+    ثانوية_عامة = 5
+    اعدادية = 6
+    ابتدائية = 7
+    بدون_مؤهل = 8
+
+
+#print(CertificateOptions.دكتوراة.value)
+
+
 app = FastAPI()
 
 
@@ -45,6 +64,39 @@ def create_dataframe(csv_data):
     csv_file.close()
 
     return df
+
+def date_renges(date_of_employment:str):
+    # Check if the 'Date of Employment' falls within any of the specified date ranges
+
+
+
+    dateOfEmployment = datetime.datetime.strptime(date_of_employment, '%Y-%m-%dT%H:%M:%S.%fZ')
+    range_name = ''
+    range_number = 0
+
+    range1_start = datetime.datetime.strptime('1/1/1967', '%m/%d/%Y').strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    range1_end = datetime.datetime.strptime('9/9/2002', '%m/%d/%Y').strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    range2_start = datetime.datetime.strptime('10/9/2002', '%m/%d/%Y').strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    range2_end = datetime.datetime.strptime('1/4/2009', '%m/%d/%Y').strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    range3_start = datetime.datetime.strptime('2/4/2009', '%m/%d/%Y').strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    range3_end = datetime.datetime.strptime('1/1/2016', '%m/%d/%Y').strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    range4_start = datetime.datetime.strptime('2/1/2016', '%m/%d/%Y').strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    current_date = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+
+    if range1_start <= date_of_employment <= range1_end:
+        range_name = 'Range 1: 1/1/1967 - 9/9/2002'
+        range_number = 1
+    elif range2_start <= date_of_employment <= range2_end:
+        range_name = 'Range 2: 10/9/2002 - 1/4/2009'
+        range_number = 2
+    elif range3_start <= date_of_employment <= range3_end:
+        range_name = 'Range 3: 2/4/2009 - 1/1/2016'
+        range_number = 3
+    elif range4_start <= date_of_employment <= current_date:
+        range_name = 'Range 4: 2/1/2016 - ' + current_date
+        range_number = 4
+    return range_name,range_number
+
 
 def data_frame():
     # Define CSV data for each table
@@ -264,62 +316,17 @@ def data_frame():
     df_table_4_6 = create_dataframe(csv_data_4_6)
     df_table_4_7 = create_dataframe(csv_data_4_7)
 
-    # Print the resulting DataFrames
-    print("Table 1:")
-    print(df_table_1)
 
-    print("Table 2:")
-    print(df_table_2)
+#Case#1 assuming no discontinous periods : 
+def case_1():
 
-    print("Table 3:")
-    print(df_table_3)
 
-    print("Table 3.1:")
-    print(df_table_3_1)
 
-    print("Table 3.2:")
-    print(df_table_3_2)
+#Testing block 
 
-    print("Table 3.4:")
-    print(df_table_3_4)
+print(date_renges('2018-09-02T21:00:00.000Z'))
 
-    print("Table 3.5:")
-    print(df_table_3_5)
 
-    # Additional tables
-    print("Table 3.6:")
-    print(df_table_3_6)
 
-    print("Table 3.7:")
-    print(df_table_3_7)
 
-    print("Table 3.8:")
-    print(df_table_3_8)
-
-    print("Table 3.9:")
-    print(df_table_3_9)
-
-    # Additional tables
-    print("Table 4:")
-    print(df_table_4)
-
-    print("Table 4.1:")
-    print(df_table_4_1)
-
-    print("Table 4.2:")
-    print(df_table_4_2)
-
-    print("Table 4.3:")
-    print(df_table_4_3)
-
-    print("Table 4.4:")
-    print(df_table_4_4)
-
-    print("Table 4.5:")
-    print(df_table_4_5)
-
-    print("Table 4.6:")
-    print(df_table_4_6)
-
-    print("Table 4.7:")
-    print(df_table_4_7)
+#end Testing block 
