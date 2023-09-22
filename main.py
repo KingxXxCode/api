@@ -1,6 +1,6 @@
 from typing import Annotated, Union
     # @title Default title text
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 import pandas as pd
 from io import StringIO
