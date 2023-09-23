@@ -323,7 +323,6 @@ def case_1():
 
 
 #Testing block 
-
 print(date_renges('2018-09-02T21:00:00.000Z'))
 
 
