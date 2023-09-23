@@ -33,7 +33,7 @@ async def read_items(q: Annotated[Union[list[str], None], Query()] = None):
     global query_items
 
     query_items = parse_input(q) 
-    print(query_items)
+  #  print(query_items)
     
     
     return query_items
