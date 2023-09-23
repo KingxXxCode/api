@@ -9,7 +9,7 @@ from fastapi import FastAPI, Query
 import json
 
 from enum import Enum, auto
-query_items_dict :dict = {} 
+query_items :dict = {} 
 class CertificateOptions(Enum):
     دكتوراة = 0
     ماجستير = 1
@@ -30,12 +30,11 @@ app = FastAPI()
 
 @app.get("/items/")
 async def read_items(q: Annotated[Union[list[str], None], Query()] = None):
-    global query_items_dict
+    global query_items
 
     query_items = parse_input(q) 
     print(query_items)
-    query_items_dict = json.loads(query_items)
-    print(query_items_dict)
+    
     
     return query_items
 
@@ -341,7 +340,7 @@ def data_frame():
 #Case#1 assuming no discontinous periods : 
 #def case_1():
 
-print(query_items_dict)
+print(query_items)
 
 
 
