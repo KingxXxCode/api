@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from typing import Annotated, Union
 import datetime
     # @title Default title text
@@ -9,7 +10,49 @@ from fastapi import FastAPI, Query
 import json
 
 from enum import Enum, auto
+import os
+
+
+
+
+def create_dataframes_from_csv(folder_path):
+    # Get a list of all files in the data folder
+    file_names = [f for f in os.listdir(folder_path) if f.endswith('.csv')]
+
+    # Initialize an empty dictionary to store DataFrames
+    dataframes = {}
+
+    # Iterate through each file and create a DataFrame
+    for file_name in file_names:
+        # Construct the full path to the CSV file
+        file_path = os.path.join(folder_path, file_name)
+        
+        # Read the CSV file into a DataFrame
+        df = pd.read_csv(file_path)
+        
+        # Extract the filename (without extension) as the key for the dictionary
+        key = os.path.splitext(file_name)[0]
+        
+        # Store the DataFrame in the dictionary
+        dataframes[key] = df
+
+    return dataframes
+
+data_folder_path = "./data"  # Replace with your actual path
+dataframes = create_dataframes_from_csv(data_folder_path)
+
+print("Keys:", dataframes.keys())
+for key, df in dataframes.items():
+    print("\nDataFrame for key:", key)
+    print(df)
+
+
 query_items :dict = {} 
+query_items_test :dict = {'numCertificates': 1, 'disContinuousPeriods': 0, 'Academic Certificate Name 1': 0, 'Date of Acquiring 1': '2023-09-14T21:00:00.000Z', 'Academic Certificate Name 2': 4, 'Date of Acquiring 2': '2023-09-08T21:00:00.000Z', 'Academic Certificate Name 3': 1, 'Date of Acquiring 3': '2023-09-01T21:00:00.000Z', 'Date of Employment': '1970-09-02T21:00:00.000Z', 'Your Current Performance Evaluation': 'ممتاز', 'Result of the Custom Calculator': 'Calculate', 'Range 1 Years': 0, 'Range 2 Years': 0, 'Range 3 Years': 0, 'Range 4 Years': 0}
+dataframes_list = []
+   
+
+
 class CertificateOptions(Enum):
     دكتوراة = 0
     ماجستير = 1
@@ -22,6 +65,35 @@ class CertificateOptions(Enum):
     بدون_مؤهل = 8
 
 
+# To do :
+def map_qualification_to_numerical(df, qualification_column):
+    """
+    Map the qualification column in the DataFrame to numerical values based on the CertificateOptions enum.
+
+    Parameters:
+    df (pandas.DataFrame): DataFrame containing the qualification column.
+    qualification_column (str): Name of the qualification column to be mapped.
+
+    Returns:
+    pandas.DataFrame: DataFrame with an additional column for the numerical representation of the qualification.
+    """
+    def map_qualification(qualification):
+        try:
+            return CertificateOptions[qualification].value
+        except KeyError:
+            return None  # or handle accordingly if the qualification is not found
+
+    # Apply the function to the specified qualification column and create a new column for the numerical representation
+    df['Numerical_Qualification'] = df[qualification_column].apply(map_qualification)
+
+    return df
+
+
+
+for df in dataframes_list:
+   # df = map_qualification_to_numerical(df, 'المؤهل')
+    print(df)
+    print('------------------------')
 #print(CertificateOptions.دكتوراة.value)
 
 
@@ -57,17 +129,7 @@ def parse_input(input_data):
     except Exception as e:
         # Handle any exceptions that may occur during parsing
         return {"error": str(e)}
-def create_dataframe(csv_data):
-    # Create a StringIO object to simulate reading from a file-like object
-    csv_file = StringIO(csv_data)
 
-    # Read the CSV data into a Pandas DataFrame
-    df = pd.read_csv(csv_file, encoding='utf-8')
-
-    # Close the StringIO object
-    csv_file.close()
-
-    return df
 
 def date_renges(date_of_employment:str):
     # Check if the 'Date of Employment' falls within any of the specified date ranges
@@ -102,251 +164,29 @@ def date_renges(date_of_employment:str):
     return range_name,range_number
 
 
-def data_frame():
-    # Define CSV data for each table
-    csv_data_Table1 = """المدة البينية,درجة التعين,المؤهل
-    5,7,بكالوريوس
-    5,8,دبلوم
-    5,9,ثانوية صناعية / تجارية
-    5,10,ثانوية عامة
-    5,11,اعدادية
-    5,12,ابتدائية
-    5,13,بدون مؤهل"""
-
-    csv_data_Table2 = """المدة البينية,درجة التعين,المؤهل
-    4,7,بكالوريوس
-    4,8,دبلوم
-    4,9,ثانوية صناعية / تجارية
-    4,10,ثانوية عامة
-    5,11,اعدادية
-    5,12,ابتدائية
-    5,13,بدون مؤهل"""
-
-    csv_data_Table3 = """درجة التعين,المؤهل
-    6,دكتوراه
-    7,ماجستير
-    7,بكالوريوس
-    8,دبلوم فوق المتوسط
-    9,ثانوية عامة
-    10,اعدادية
-    11,ابتدائية
-    13,بدون مؤهل"""
-
-    csv_data_3_1 = """المدة البينية,الدرجات ,المؤهل
-    ,1,دكتوراه
-    4,2,
-    4,3,
-    3,4,
-    3,5,
-    2,6,"""
-
-    csv_data_3_2 = """المدة البينية,الدرجات ,المؤهل
-    4,1,ماجستير
-    4,2,
-    4,3,
-    3,4,
-    3,5,
-    3,6,
-    2,7,"""
-
-    csv_data_3_4 = """المدة البينية,الدرجات ,المؤهل
-    4,1,بكالوريوس
-    4,2,
-    4,3,
-    3,4,
-    3,5,
-    3,6,
-    3,7,"""
-
-    csv_data_3_5 = """المدة البينية,الدرجات ,المؤهل
-    4,2,دبلوم فوق المتوسط
-    4,3,
-    4,4,
-    4,5,
-    4,6,
-    4,7,
-    4,8,"""
-
-    # Additional tables
-    csv_data_3_6 = """المدة البينية,الدرجات ,المؤهل
-    4,3,ثانوية عامة
-    4,4,
-    4,5,
-    4,6,
-    4,7,
-    4,8,
-    4,9,"""
-
-    csv_data_3_7 = """المدة البينية,الدرجات ,المؤهل
-    4,4,اعدادية
-    4,5,
-    4,6,
-    4,7,
-    4,8,
-    4,9,
-    4,10,"""
-
-    csv_data_3_8 = """المدة البينية,الدرجات ,المؤهل
-    4,5,ابتدائية
-    4,6,
-    4,7,
-    4,8,
-    4,9,
-    4,10,
-    4,11,"""
-
-    csv_data_3_9 = """المدة البينية,الدرجات ,المؤهل
-    4,6,بدون مؤهل
-    4,7,
-    4,8,
-    4,9,
-    4,10,
-    4,11,
-    4,12,
-    4,13,"""
-
-    # Additional tables
-    csv_data_Table4 = """درجة التعين,المؤهل
-    6,دكتوراه
-    7,ماجستير
-    7,بكالوريوس
-    8,دبلوم فوق المتوسط
-    9,ثانوية عامة
-    10,اعدادية
-    11,ابتدائية
-    13,بدون مؤهل"""
-
-    csv_data_4_1 = """المدة البينية,الدرجات ,المؤهل
-    ,-1,دكتوراه
-    5,0,
-    5,1,
-    4,2,
-    4,3,
-    3,4,
-    3,5,
-    2,6,"""
-
-    csv_data_4_2 = """المدة البينية,الدرجات ,المؤهل
-    ,-1,ماجستير
-    5,0,
-    5,1,
-    4,2,
-    4,3,
-    3,4,
-    3,5,
-    3,6,
-    2,7,"""
-
-    csv_data_4_3 = """المدة البينية,الدرجات ,المؤهل
-    ,-1,بكالوريوس
-    5,0,
-    5,1,
-    4,2,
-    4,3,
-    3,4,
-    3,5,
-    3,6,
-    3,7,"""
-
-    csv_data_4_4 = """المدة البينية,الدرجات ,المؤهل
-    ,0,دبلوم فوق المتوسط
-    5,1,
-    4,2,
-    4,3,
-    4,4,
-    4,5,
-    4,6,
-    4,7,
-    4,8,"""
-
-    csv_data_4_5 = """المدة البينية,الدرجات ,المؤهل
-    ,0,ثانوية عامة
-    5,1,
-    5,2,
-    4,3,
-    4,4,
-    4,5,
-    4,6,
-    4,7,
-    4,8,
-    4,9,"""
-
-    csv_data_4_6 = """المدة البينية,الدرجات ,المؤهل
-    ,1,اعدادية
-    5,2,
-    5,3,
-    4,4,
-    4,5,
-    4,6,
-    4,7,
-    4,8,
-    4,9,
-    4,10,"""
-
-    csv_data_4_7 = """المدة البينية,الدرجات ,المؤهل
-    ,2,ابتدائية
-    5,3,
-    5,4,
-    4,5,
-    4,6,
-    4,7,
-    4,8,
-    4,9,
-    4,10,
-    4,11,"""
-
-
-    csv_data_4_8 = """المدة البينية,الدرجات ,المؤهل
-    ,3,بدون مؤهل
-    5,4,
-    5,5,
-    4,6,
-    4,7,
-    4,8,
-    4,9,
-    4,10,
-    4,11,
-    4,12,
-    4,13,"""
-
-    # Create DataFrames for each table
-    df_table_1 = create_dataframe(csv_data_Table1)
-    df_table_2 = create_dataframe(csv_data_Table2)
-    df_table_3 = create_dataframe(csv_data_Table3)
-    df_table_3_1 = create_dataframe(csv_data_3_1)
-    df_table_3_2 = create_dataframe(csv_data_3_2)
-    df_table_3_4 = create_dataframe(csv_data_3_4)
-    df_table_3_5 = create_dataframe(csv_data_3_5)
-
-    # Additional tables
-    df_table_3_6 = create_dataframe(csv_data_3_6)
-    df_table_3_7 = create_dataframe(csv_data_3_7)
-    df_table_3_8 = create_dataframe(csv_data_3_8)
-    df_table_3_9 = create_dataframe(csv_data_3_9)
-
-    # Additional tables
-    df_table_4 = create_dataframe(csv_data_Table4)
-    df_table_4_1 = create_dataframe(csv_data_4_1)
-    df_table_4_2 = create_dataframe(csv_data_4_2)
-    df_table_4_3 = create_dataframe(csv_data_4_3)
-    df_table_4_4 = create_dataframe(csv_data_4_4)
-    df_table_4_5 = create_dataframe(csv_data_4_5)
-    df_table_4_6 = create_dataframe(csv_data_4_6)
-    df_table_4_7 = create_dataframe(csv_data_4_7)
-    df_table_4_8 = create_dataframe(csv_data_4_8)
-
-
 #
 #Case#1 assuming no discontinous periods : 
-#def case_1():
+def case_1():
 
-print(query_items)
+    print(query_items_test['Date of Employment'])
+    print(date_renges(query_items_test['Date of Employment'])[1])  # get the date of employment to know from which range to start , assuming no discontinous periods .
+    print(query_items_test['Academic Certificate Name 1']) # get the first certificate name to know from which rank to start 
+    range_to_start = date_renges(query_items_test['Date of Employment'])[1]
+    if range_to_start == 1:
+        pass    
+    elif range_to_start == 2:
+        pass    
+    elif range_to_start == 3:
+        pass
+    elif range_to_start == 4:
+        pass
+    rank_to_start = query_items_test['Academic Certificate Name 1']
+
 
 
 
 #Testing block 
 #print(date_renges('2018-09-02T21:00:00.000Z'))
-
 
 #case_1()
 
