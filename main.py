@@ -9,7 +9,7 @@ from fastapi import FastAPI, Query
 import json
 
 from enum import Enum, auto
-
+query_items = None 
 class CertificateOptions(Enum):
     دكتوراة = 0
     ماجستير = 1
@@ -30,6 +30,8 @@ app = FastAPI()
 
 @app.get("/items/")
 async def read_items(q: Annotated[Union[list[str], None], Query()] = None):
+    global query_items
+
     query_items = parse_input(q) 
     
     return query_items
@@ -291,6 +293,20 @@ def data_frame():
     4,10,
     4,11,"""
 
+
+    csv_data_4_8 = """المدة البينية,الدرجات ,المؤهل
+    ,3,بدون مؤهل
+    5,4,
+    5,5,
+    4,6,
+    4,7,
+    4,8,
+    4,9,
+    4,10,
+    4,11,
+    4,12,
+    4,13,"""
+
     # Create DataFrames for each table
     df_table_1 = create_dataframe(csv_data_Table1)
     df_table_2 = create_dataframe(csv_data_Table2)
@@ -315,10 +331,12 @@ def data_frame():
     df_table_4_5 = create_dataframe(csv_data_4_5)
     df_table_4_6 = create_dataframe(csv_data_4_6)
     df_table_4_7 = create_dataframe(csv_data_4_7)
+    df_table_4_8 = create_dataframe(csv_data_4_8)
 
 
 #Case#1 assuming no discontinous periods : 
-def case_1():
+#def case_1():
+#    query_items
 
 
 
