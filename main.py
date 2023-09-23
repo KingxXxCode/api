@@ -106,7 +106,10 @@ async def read_items(q: Annotated[Union[list[str], None], Query()] = None):
 
     query_items = parse_input(q) 
   #  print(query_items)
-    
+    print("Keys:", dataframes.keys())
+    for key, df in dataframes.items():
+        print("\nDataFrame for key:", key)
+        print(df)
     
     return query_items
 
