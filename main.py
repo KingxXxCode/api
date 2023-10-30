@@ -277,7 +277,8 @@ async def read_items(q: Annotated[Union[list[str], None], Query()] = None):
     
     
     
-    return case_2()
+    return query_items
+    #case_2()
 
 
 def parse_input(input_data):
